@@ -3,7 +3,7 @@ module Conversion (hex2bs, bs2base64, bs2hex) where
 import Numeric
 import Data.Char
 import Data.List
-import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as B
 import Data.Word8
 
 splitBy :: Int -> [a] -> [[a]]

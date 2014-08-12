@@ -1,4 +1,4 @@
-import qualified Data.ByteString as B
+import qualified Data.ByteString.Lazy as B
 import Data.Bits
 import Conversion
 

@@ -1,10 +1,5 @@
-import qualified Data.ByteString.Lazy as B
-import Data.Bits
+import Xor
 import Conversion
-
-fixedXor :: B.ByteString -> B.ByteString -> B.ByteString
-fixedXor as bs = B.pack $ zipWith xor (bytes as) (bytes bs)
-  where bytes = map fromIntegral . B.unpack
 
 main :: IO ()
 main = do

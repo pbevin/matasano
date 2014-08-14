@@ -1,10 +1,11 @@
-module Conversion (hex2bs, bs2base64, bs2hex) where
+module Conversion (hex2bs, bs2base64, bs2hex, text2bs) where
 
 import Numeric
 import Data.Char
 import Data.List
 import qualified Data.ByteString.Lazy as B
 import Data.Word8
+import Text.Printf
 
 splitBy :: Int -> [a] -> [[a]]
 splitBy _ [] = []
@@ -17,9 +18,14 @@ hex2ints = map hex2int . splitBy 2
 hex2bs :: String -> B.ByteString
 hex2bs = B.pack . hex2ints
 
+text2bs :: String -> B.ByteString
+text2bs = B.pack . map (fromIntegral . ord)
+
 bs2hex :: B.ByteString -> String
 bs2hex = concat . map toHex . map fromIntegral . B.unpack
-  where toHex n = showHex n ""
+
+toHex :: Int -> String
+toHex = printf "%02x"
 
 bs2base64 :: B.ByteString -> String
 bs2base64 = concat . map toBase64 . splitBy 3 . map fromIntegral . B.unpack

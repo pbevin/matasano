@@ -1,4 +1,4 @@
-module Xor (fixedXor, solveXor) where
+module Xor (fixedXor, solveXor, repeatingXor) where
 
 import qualified Data.ByteString.Lazy as B
 import Data.Bits
@@ -9,6 +9,9 @@ import Data.Function
 fixedXor :: B.ByteString -> B.ByteString -> B.ByteString
 fixedXor as bs = B.pack $ zipWith xor (bytes as) (bytes bs)
   where bytes = map fromIntegral . B.unpack
+
+repeatingXor :: B.ByteString -> B.ByteString -> B.ByteString
+repeatingXor key text = fixedXor (B.cycle key) text
 
 type Score = Int
 solveXor :: B.ByteString -> [(B.ByteString, Score)]

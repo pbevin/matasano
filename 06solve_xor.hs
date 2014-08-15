@@ -5,6 +5,8 @@ import Data.Char
 import Data.List
 import Data.Function
 import Conversion
+import Xor
+
 
 bitsSet :: (Bits a, Num a) => a -> Int
 bitsSet 0 = 0
@@ -26,7 +28,18 @@ eds as lens = map addEditDistance $ [2..40]
                 ys = B.take n (B.drop n as)
                 n = fromIntegral len
 
+inGroups :: Int -> B.ByteString -> [B.ByteString]
+inGroups n bs
+  | B.null bs   = []
+  | otherwise = xs : inGroups n ys where (xs, ys) = B.splitAt (fromIntegral n) bs
+
+solveWithKeyLength :: Int -> B.ByteString -> (Int, B.ByteString)
+solveWithKeyLength n bs = (n, B.concat . B.transpose . map (fst . head . solveXor) . B.transpose $ inGroups n bs)
+
 main = do
   enc <- readFile "6.txt"
-  putStrLn $ show $ eds (base642bs enc) [2..80]
-  putStrLn $ show $ bestKeyLength (base642bs enc)
+  let str = base642bs enc
+  let keyLen = bestKeyLength str
+  mapM_ (putStrLn . show . (flip solveWithKeyLength) str) [2..40]
+
+  -- putStrLn $ show $ sortBy (compare `on` snd) $ eds (base642bs enc) [2..80]

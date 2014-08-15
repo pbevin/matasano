@@ -51,6 +51,8 @@ toBase64 [a,b,c] = map enc64 [w, x, y, z]
 
 fromBase64 :: Integral a => [a] -> [a]
 -- fromBase64 [a, b, '=', '='] = fromBase64 [a, b]
+fromBase64 [a, b] = take 1 $ fromBase64 [a, b, 0, 0]
+fromBase64 [a, b, c] = take 2 $ fromBase64 [a, b, c, 0]
 fromBase64 [a, b, c, d] = [x, y, z]
   where x = a * 4 + (b `div` 16)
         y = (b `mod` 16) * 16 + (c `div` 4)

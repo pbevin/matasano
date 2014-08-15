@@ -21,6 +21,6 @@ solveXor message = reverse $ sortBy (compare `on` snd) $ map addScore $ tries
         decodeWithKey key = fixedXor (B.pack $ repeat key)
         score bs = sum $ map (freq . fromIntegral) $ filter printable $ B.unpack bs
         printable ch = ch >= 32 && ch < 127
-        freq ch = case (chr ch) `elemIndex` (reverse "etaoinshrdlu") of
-                     Just f -> f
-                     Nothing -> -1
+        freq ch = case (toLower $ chr ch) `elemIndex` (reverse "etaonrishdlfcmugypwbvkjxqz ") of
+                     Just f -> f + 1
+                     Nothing -> 0

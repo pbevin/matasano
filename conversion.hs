@@ -1,7 +1,8 @@
-module Conversion (hex2bs, bs2base64, bs2hex, text2bs) where
+module Conversion (hex2bs, bs2base64, base642bs, bs2hex, text2bs) where
 
 import Numeric
 import Data.Char
+import Data.Maybe
 import Data.List
 import qualified Data.ByteString.Lazy as B
 import Data.Word8
@@ -30,8 +31,14 @@ toHex = printf "%02x"
 bs2base64 :: B.ByteString -> String
 bs2base64 = concat . map toBase64 . splitBy 3 . map fromIntegral . B.unpack
 
+base642bs :: String -> B.ByteString
+base642bs = B.pack . concat . map fromBase64 . splitBy 4 . map fromIntegral . map fromJust . filter isJust . map (`elemIndex` base64chars)
+
 enc64 :: Int -> Char
-enc64 = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" !!)
+enc64 = (base64chars !!)
+
+base64chars :: String
+base64chars  = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 toBase64 :: [Int] -> String
 toBase64 [a]     = (take 2 $ toBase64 [a,0,0]) ++ "=="
@@ -41,3 +48,10 @@ toBase64 [a,b,c] = map enc64 [w, x, y, z]
         x = a `mod` 4 * 16 + b `div` 16
         y = b `mod` 16 * 4 + c `div` 64
         z = c `mod` 64
+
+fromBase64 :: Integral a => [a] -> [a]
+-- fromBase64 [a, b, '=', '='] = fromBase64 [a, b]
+fromBase64 [a, b, c, d] = [x, y, z]
+  where x = a * 4 + (b `div` 16)
+        y = (b `mod` 16) * 16 + (c `div` 4)
+        z = (c `mod` 4) * 64 + d

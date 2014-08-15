@@ -1,6 +1,6 @@
 module Xor (fixedXor, solveXor, repeatingXor) where
 
-import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString as B
 import Data.Bits
 import Data.Char
 import Data.List

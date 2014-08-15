@@ -4,7 +4,7 @@ import Numeric
 import Data.Char
 import Data.Maybe
 import Data.List
-import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString as B
 import Data.Word8
 import Text.Printf
 
